@@ -7,7 +7,7 @@ const io = require("socket.io")(http, {
     origin: ["http://localhost:4200", "https://shokii.com/"],
     methods: ["GET", "POST"],
   },
-
+}); 
 
 const cors = require("cors");
 
