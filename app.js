@@ -4,14 +4,10 @@ const http = require("http").createServer(app);
 
 const io = require("socket.io")(http, {
   cors: {
-    origin: "http://localhost:4200",
+    origin: ["http://localhost:4200", "https://shokii.com/"],
     methods: ["GET", "POST"],
   },
-  // cors: {
-  //   origin: "https://shokii.com/",
-  //   methods: ["GET", "POST"],
-  // },
-});
+
 
 const cors = require("cors");
 
