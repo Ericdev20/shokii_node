@@ -7,7 +7,7 @@ const io = require("socket.io")(http, {
     origin: ["http://localhost:4200", "https://shokii.com/"],
     methods: ["GET", "POST"],
   },
-}); 
+});
 
 const cors = require("cors");
 
@@ -23,31 +23,38 @@ app.use((req, res, next) => {
   next();
 });
 
-// Configuration de l'application Express
 app.use(express.static("public"));
 
-// Gestionnaire de connexion Socket.IO
+const onlineUsers = new Set();
+
 io.on("connection", (socket) => {
   console.log("Un utilisateur est connecté");
 
-  // Gestion des événements de chat
+  socket.on("userConnected", (userId) => {
+    console.log(`L'utilisateur avec l'ID ${userId} est en ligne`);
+    onlineUsers.add(userId);
+    io.emit("onlineUsers", Array.from(onlineUsers));
+  });
+
   socket.on("chat message", (msg) => {
     console.log("Message reçu : " + msg.body);
-
-    // Récupérer l'ID de l'utilisateur destinataire
     const recipientId = msg.to_id;
     console.log("Recipient id : " + recipientId);
-
-    // Diffusion du message à tous les utilisateurs connectés
     io.emit("chat message", msg);
   });
-  // Gestion de la déconnexion de l'utilisateur
-  socket.on("disconnect", () => {
-    console.log("Un utilisateur s'est déconnecté");
+
+  socket.on("disconnected", (userId) => {
+    // const userId = Array.from(onlineUsers).find(
+    //   (id) => id === socket.id
+    // );
+    if (userId) {
+      console.log(`L'utilisateur avec l'ID ${userId} s'est déconnecté`);
+      onlineUsers.delete(userId);
+      io.emit("onlineUsers", Array.from(onlineUsers));
+    }
   });
 });
 
-// Démarrage du serveur
 const port = 3000;
 http.listen(port, () => {
   console.log("Serveur en écoute sur le port " + port);
