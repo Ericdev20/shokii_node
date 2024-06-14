@@ -73,9 +73,19 @@ const sendNotification = (token, title, body) => {
     notification: {
       title: title,
       body: body,
-      image: "https://shokii.com/assets/images/logo/shokii.png",
+    },
+    android: {
+      notification: {
+        clickAction: "news_intent",
+        icon: "https://us.123rf.com/450wm/blinkblink1/blinkblink12005/blinkblink1200500015/146979464-avatar-ic%C3%B4ne-de-l-homme.jpg?ver=6",
+        color: "#7e55c3",
+      },
     },
     webpush: {
+      notification: {
+        requireInteraction: true,
+        icon: "https://us.123rf.com/450wm/blinkblink1/blinkblink12005/blinkblink1200500015/146979464-avatar-ic%C3%B4ne-de-l-homme.jpg?ver=6",
+      },
       fcm_options: {
         link: "https://shokii.com",
       },
