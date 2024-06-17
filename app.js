@@ -117,6 +117,18 @@ app.post("/sendNotification", (req, res) => {
   res.status(200).send("Notification envoyée");
 });
 
+app.post("/sendChatMessage", (req, res) => {
+  console.log("Received /sendChatMessage request");
+  const { body, to_id } = req.body;
+  console.log(`body: ${body}, to_id: ${to_id}`);
+  const msg = {
+    body: body,
+    to_id: to_id,
+  };
+  io.emit("chat message", msg);
+  res.status(200).send("Message envoyé via le socket");
+});
+
 const port = 3000;
 http.listen(port, () => {
   console.log("Serveur en écoute sur le port " + port);
